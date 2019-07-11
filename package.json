@@ -1,0 +1,24 @@
+{
+  "name": "rd_server_side",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "npm": "^6.9.0",
+    "postman": "^0.2.0",
+    "request": "^2.88.0",
+    "tedious": "^6.1.1",
+    "tedious-connection-pool": "^1.0.5",
+    "xml2js": "^0.4.19"
+  }
+}
