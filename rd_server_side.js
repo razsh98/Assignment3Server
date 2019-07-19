@@ -24,6 +24,17 @@ function makeusername(length) {
     }
     return result;
 }
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 app.use(express.json());
 
@@ -222,14 +233,14 @@ app.get('/get_attractions_by_city/:city', function(req, res){
 //19
 app.get('/get_attractions_by_category/:category', function(req, res){
     DButilsAzure.execQuery
-    ("SELECT name,city FROM POI WHERE category Like '%" + req.params['category'] + "%'")
+    ("SELECT * FROM POI WHERE category Like '%" + req.params['category'] + "%'")
         .then(function(result){
             res.header("Access-Control-Allow-Origin","*");
-            res.send(result)
+            res.send(result);
         })
         .catch(function(err){
-            console.log(err)
-            res.send(err)
+            console.log(err);
+            res.send(err);
         })
 });
 //19
@@ -242,8 +253,8 @@ app.get('/get_attractions_by_category_sort', function(req, res){
 
         })
         .catch(function(err){
-            console.log(err)
-            res.send(err)
+            console.log(err);
+            res.send(err);
         })
 });//19
 app.get('/get_attractions_by_rate_sort', function(req, res){
@@ -308,28 +319,29 @@ app.get('/move_to_POI/:POI_ID', function(req, res){
 //11
 //Insert new tuple to saved attractions
 app.get('/save_attraction/:username/:POI_ID', (req, res) => {
-    var username = req.params.username;
-    var POI_ID = req.params.POI_ID;
-    var date = new Date();
+    var username = req.params['username'];
+    var POI_ID = req.params['POI_ID'];
+    var date = formatDate(new Date());
+    console.log(date);
     DButilsAzure.execQuery("INSERT INTO Saved_attractions (username, POI_ID, date)" +
         "VALUES ('"+username+"','"+POI_ID+"','"+date+"')")
         .then(function (result) {
             res.send(result);
         })
         .catch(function (err) {
-            res.send(err)
+            res.send(err);
         });
 });
 
 //11/////////////////////////////////done
 
 //17
-app.get('/get_saved_attractions', function(req, res){
+app.get('/get_saved_attractions/:username', function(req, res){
     DButilsAzure.execQuery
-    ("SELECT * FROM Saved_attractions")
+    ("SELECT POI_ID FROM Saved_attractions Where username= "+ req.params['username']+" ;")
         .then(function(result){
             res.header("Access-Control-Allow-Origin","*");
-            res.send(result)
+            res.send(result);
         })
         .catch(function(err){
             console.log(err)
