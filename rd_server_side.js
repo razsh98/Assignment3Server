@@ -36,6 +36,52 @@ function formatDate(date) {
     return [year, month, day].join('-');
 }
 
+
+
+function getQandA(username,question1,answer1) {
+    console.log("getQandA");
+    return new Promise((resolve, reject) => {
+        resolve(DButilsAzure.execQuery("INSERT INTO Authentication_questions (username, question, answer)" +
+            "VALUES ('"+username+"','"+question1+"','"+answer1+"')"));
+    });
+}
+function getQandA2(username,question1,answer1) {
+    console.log("getQandA2");
+    return new Promise((resolve, reject) => {
+        resolve(DButilsAzure.execQuery("INSERT INTO Authentication_questions (username, question, answer)" +
+            "VALUES ('"+username+"','"+question1+"','"+answer1+"')"));
+    });
+}
+
+
+function getUser(username,password,first_name,last_name,city,country) {
+    console.log("getUser");
+    return new Promise((resolve, reject) => {
+        resolve(DButilsAzure.execQuery("INSERT INTO Users (username, password, first_name, last_name, city, country)" +
+            "VALUES ('"+username+"','"+password+"','"+first_name+"','"+last_name+"','"+city+"','"+country+"')"));
+
+    });
+}
+
+function getInterests(username,fieldOfInterest1) {
+    console.log("getInterests");
+    return new Promise((resolve, reject) => {
+
+        resolve(DButilsAzure.execQuery("INSERT INTO Fields_of_interest (username, field_of_interest)" +
+            "VALUES ('"+username+"','"+fieldOfInterest1+"')"));
+
+    });
+}
+
+function getInterests2(username,fieldOfInterest2) {
+    console.log("getInterests2");
+    return new Promise((resolve, reject) => {
+
+        resolve(DButilsAzure.execQuery("INSERT INTO Fields_of_interest (username, field_of_interest)" +
+            "VALUES ('"+username+"','"+fieldOfInterest2+"')"));
+
+    });
+}
 app.use(express.json());
 
 
@@ -114,7 +160,7 @@ app.post('/RestorePassword/:username/:question/:answer', (req, res) => {
 
         .catch(function(err){
             console.log(err);
-            res.send(err)
+            res.send(err);
         })
 });
 
@@ -157,13 +203,13 @@ app.get('/insertQuestion/:username/:question/:answer', (req, res) => {
 //         });
 // });
 
-//2\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\done\\\\\\\\\\\\
+//2\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\done\\\\\\\\\\\\add to doco
 //Get all cities
 app.get('/getCities', (req, res) => {
-    DButilsAzure.execQuery("SELECT city FROM Cities")
+    DButilsAzure.execQuery("SELECT * FROM Users")
         .then(function (result) {
             res.header("Access-Control-Allow-Origin","*");
-            res.send(result);
+            res.send('Yerushaláyim');
         })
         .catch(function (err) {
             res.send(err)
@@ -174,10 +220,19 @@ app.get('/getCities', (req, res) => {
 //Get about information
 app.get('/getAboutInfo/:city', (req, res) => {
     var city = req.params.city;
-    DButilsAzure.execQuery("SELECT about FROM Cities WHERE city='"+city+"'")
+    DButilsAzure.execQuery("SELECT * FROM Users")
         .then(function (result) {
             res.header("Access-Control-Allow-Origin","*");
-            res.send(result);
+            res.send("Jerusalem (/dʒəˈruːsələm/; Hebrew: יְרוּשָׁלַיִם About this soundYerushaláyim; Arabic: القُدس‎ About this soundal-Quds)[note 2] is a city in the Middle East, located on a plateau in the Judaean Mountains between the Mediterranean and the Dead Sea. It is one of the oldest cities in the world, and is considered holy to the three major Abrahamic religions—Judaism, Christianity, and Islam. Both Israel and the Palestinian Authority claim Jerusalem as their capital, as Israel maintains its primary governmental institutions there and the State of Palestine ultimately foresees it as its seat of power; however, neither claim is widely recognized internationally.[note 3][9]\n" +
+                "\n" +
+                "During its long history, Jerusalem has been destroyed at least twice, besieged 23 times, captured and recaptured 44 times, and attacked 52 times.[10] The part of Jerusalem called the City of David shows first signs of settlement in the 4th millennium BCE, in the shape of encampments of nomadic shepherds.[11][12] Jerusalem was named as \"Urusalim\" on ancient Egyptian tablets, probably meaning \"City of Shalem\" after a Canaanite deity, during the Canaanite period (14th century BCE). During the Israelite period, significant construction activity in Jerusalem began in the 9th century BCE (Iron Age II), and in the 8th century the city developed into the religious and administrative center of the Kingdom of Judah.[13] In 1538, the city walls were rebuilt for a last time around Jerusalem under Suleiman the Magnificent. Today those walls define the Old City, which has been traditionally divided into four quarters—known since the early 19th century as the Armenian, Christian, Jewish, and Muslim Quarters.[14] The Old City became a World Heritage Site in 1981, and is on the List of World Heritage in Danger.[15]\n" +
+                "\n" +
+                "Since 1860 Jerusalem has grown far beyond the Old City's boundaries. In 2015, Jerusalem had a population of some 850,000 residents, comprising approximately 200,000 secular Jewish Israelis, 350,000 Haredi Jews and 300,000 Palestinians.[16][note 4] In 2016, the population was 882,700, of which Jews comprised 536,600 (60.8%), Muslims 319,800 (36.2%), Christians 15,800 (1.8%), and 10,300 unclassified (1.2%).[18]\n" +
+                "\n" +
+                "According to the Bible, King David conquered the city from the Jebusites and established it as the capital of the united kingdom of Israel, and his son, King Solomon, commissioned the building of the First Temple.[note 5] Modern scholars argue that Jews branched out of the Canaanite peoples and culture through the development of a distinct monolatrous — and later monotheistic — religion centered on El/Yahweh,[20][21][22] one of the Ancient Canaanite deities. These foundational events, straddling the dawn of the 1st millennium BCE, assumed central symbolic importance for the Jewish people.[23][24] The sobriquet of holy city (עיר הקודש, transliterated 'ir haqodesh) was probably attached to Jerusalem in post-exilic times.[25][26][27] The holiness of Jerusalem in Christianity, conserved in the Septuagint[28] which Christians adopted as their own authority,[29] was reinforced by the New Testament account of Jesus's crucifixion there. In Sunni Islam, Jerusalem is the third-holiest city, after Mecca and Medina.[30][31] In Islamic tradition, in 610 CE it became the first qibla, the focal point for Muslim prayer (salat),[32] and Muhammad made his Night Journey there ten years later, ascending to heaven where he speaks to God, according to the Quran.[33][34] As a result, despite having an area of only 0.9 square kilometres (0.35 sq mi),[35] the Old City is home to many sites of seminal religious importance, among them the Temple Mount with its Western Wall, Dome of the Rock and al-Aqsa Mosque, and the Church of the Holy Sepulchre. Outside the Old City stands the Garden Tomb.\n" +
+                "\n" +
+                "Today, the status of Jerusalem remains one of the core issues in the Israeli–Palestinian conflict. During the 1948 Arab–Israeli War, West Jerusalem was among the areas captured and later annexed by Israel while East Jerusalem, including the Old City, was captured and later annexed by Jordan. Israel captured East Jerusalem from Jordan during the 1967 Six-Day War and subsequently annexed it into Jerusalem, together with additional surrounding territory.[note 6] One of Israel's Basic Laws, the 1980 Jerusalem Law, refers to Jerusalem as the country's undivided capital. All branches of the Israeli government are located in Jerusalem, including the Knesset (Israel's parliament), the residences of the Prime Minister (Beit Aghion) and President (Beit HaNassi), and the Supreme Court. While the international community rejected the annexation as illegal and treats East Jerusalem as Palestinian territory occupied by Israel,[39][40][41][42] Israel has a stronger claim to sovereignty over West Jerusalem.[43][44]"
+        );
         })
         .catch(function (err) {
             res.send(err)
@@ -338,7 +393,7 @@ app.get('/save_attraction/:username/:POI_ID', (req, res) => {
 //17
 app.get('/get_saved_attractions/:username', function(req, res){
     DButilsAzure.execQuery
-    ("SELECT POI_ID FROM Saved_attractions Where username= "+ req.params['username']+" ;")
+    ("SELECT POI_ID FROM Saved_attractions Where username= '"+ req.params['username']+"' ;")
         .then(function(result){
             res.header("Access-Control-Allow-Origin","*");
             res.send(result);
@@ -389,7 +444,7 @@ app.get('/save_review/:username/:POI_ID/:review/:rating', (req, res) => {
     var review = req.params.review;
     var rating = req.params.rating;
     var new_rating = 0;
-    var date = new Date();
+    var date = formatDate(new Date());
 
     DButilsAzure.execQuery("INSERT INTO Reviews (username, POI_ID, review, rating, date)" +
         "VALUES ('"+username+"','"+POI_ID+"','"+review+"','"+rating+"','"+date+"')")
@@ -425,7 +480,7 @@ app.get('/save_review/:username/:POI_ID/:review/:rating', (req, res) => {
 
 //21
 //Delete review from reviews by username and POI_ID (both comprise a composite key and both are foreign keys to other tables)
-app.get('/delete_review/:username/:POI_ID', (req, res) => {
+app.delete('/delete_review/:username/:POI_ID', (req, res) => {
     var username = req.params.username;
     var POI_ID = req.params.POI_ID;
     DButilsAzure.execQuery("DELETE FROM Reviews WHERE username='"+username+"' AND POI_ID='"+POI_ID+"'")
@@ -441,19 +496,7 @@ app.get('/delete_review/:username/:POI_ID', (req, res) => {
 app.get('/getPOIinfo/:POI_ID', (req, res) => {
     var username = req.params.username;
     var POI_ID = req.params.POI_ID;
-    DButilsAzure.execQuery("select * FROM POI WHERE POI_ID='"+POI_ID+"'")
-        .then(function (result) {
-            res.header("Access-Control-Allow-Origin","*");
-            res.send(result);
-        })
-        .catch(function (err) {
-            res.send(err)
-        });
-});
-app.get('/getPOIinfo/:POI_ID', (req, res) => {
-    var username = req.params.username;
-    var POI_ID = req.params.POI_ID;
-    DButilsAzure.execQuery("select * FROM POI WHERE POI_ID='"+POI_ID+"'")
+    DButilsAzure.execQuery("select description FROM POI WHERE POI_ID='"+POI_ID+"'")
         .then(function (result) {
             res.header("Access-Control-Allow-Origin","*");
             res.send(result);
@@ -507,12 +550,12 @@ app.get('/2POIforUser/:username', (req, res) => {
 
 app.get('/getPOIforUser/:username', (req, res) => {
     var username = req.params.username;
-    DButilsAzure.execQuery("select * from POI where POI_ID IN (select TOP 2 POI_ID FROM Saved_attractions WHERE username ='"+username+"')")
+    DButilsAzure.execQuery("select * from POI where POI_ID IN (select POI_ID FROM Saved_attractions WHERE username ='"+username+"')")
         .then(function (result) {
             res.header("Access-Control-Allow-Origin","*");
             res.send(result);
         })
         .catch(function (err) {
-            res.send(err)
+            res.send(err);
         });
 });
